@@ -20,7 +20,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
         end
   
         <% if options[:stateful] %>
-        should "signup in pending state"
+        should "signup in pending state" do
           assigns(:<%= file_name %>).reload
           assert assigns(:<%= file_name %>).pending?
         end<% end %>
