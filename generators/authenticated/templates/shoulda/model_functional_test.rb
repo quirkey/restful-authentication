@@ -25,6 +25,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
           assert assigns(:<%= file_name %>).pending?
         end<% end %>
         <% if options[:include_activation] %>
+          
         should "create activation code" do
           assigns(:<%= file_name %>).reload
           assert_not_nil assigns(:<%= file_name %>).activation_code
@@ -48,7 +49,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
     end
     <% if options[:include_activation] %>
     context "activating <%= file_name %>" do
-      context "with inactive <%= file name %> with key" do
+      context "with inactive <%= file_name %> with key" do
         setup do
           get :activate, :activation_code => <%= table_name %>(:aaron).activation_code
         end
@@ -59,14 +60,14 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
           assert_not_nil flash[:notice]
         end
         
-        should "activate <%= file name %>" do
-          assert assigns(:<%= file name %>).active?
+        should "activate <%= file_name %>" do
+          assert assigns(:<%= file_name %>).active?
           assert_equal <%= table_name %>(:aaron), <%= class_name %>.authenticate('aaron', 'monkey')
         end
       end
       
       context "with no key" do
-        should "not activate <%= file name %>" do
+        should "not activate <%= file_name %>" do
           begin
             get :activate
             assert_nil flash[:notice]
@@ -77,7 +78,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
       end
       
       context "with blank key" do
-        should "not activate <%= file name %>" do
+        should "not activate <%= file_name %>" do
           begin
             get :activate, :activation_code => ''
             assert_nil flash[:notice]
