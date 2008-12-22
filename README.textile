@@ -121,6 +121,7 @@ To use the generator:
     --include-activation \
     --stateful \
     --rspec \
+    --shoulda \
     --skip-migration \
     --skip-routes \
     --old-passwords
@@ -152,7 +153,9 @@ To use the generator:
   (make sure you "./script/generate rspec" after installing RSpec.)  The rspec
   and story suite are much more thorough than the rails tests, and changes are
   unlikely to be backported.
-  
+
+* --shoulda: Generates Test::Unit tests in the Shoulda format. Requires "shoulda":http://github.com/thoughtbot/shoulda installed as a plugin or gem.
+
 * --old-passwords: Use the older password scheme (see [[#COMPATIBILITY]], above)
 
 * --skip-migration: Don't generate a migration file for this model
