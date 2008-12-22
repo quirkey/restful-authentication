@@ -6,8 +6,8 @@ class <%= class_name %>Test < ActiveSupport::TestCase
   include AuthenticatedTestHelper
   fixtures :<%= table_name %>
 
-  should_require :login, :email, :password, :password_confirmation
-  should_require_unique_attributes :email, :scoped_to => [:store_id]
+  should_require_attributes :login, :email, :password, :password_confirmation
+  should_require_unique_attributes :email
 
   context "creating a regular <%= file_name %>" do
     setup do
@@ -36,7 +36,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
     context "authenticating" do
 
       should "authenticate <%= file_name %> by email" do
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(store, @<%= file_name %>.email, 'monkey')
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.email, 'monkey')
       end
 
       should "authenticate by remote key" do
@@ -45,12 +45,12 @@ class <%= class_name %>Test < ActiveSupport::TestCase
 
       should "reset password on update" do
         @<%= file_name %>.update_attributes(:password => 'new password', :password_confirmation => 'new password')
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(store, 'quentin@example.com', 'new password')
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate('quentin@example.com', 'new password')
       end
 
       should "not rehash password if password is not included when updating" do
         @<%= file_name %>.update_attributes(:email => 'quentin2@example.com')
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(store, 'quentin2@example.com', 'monkey')
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate('quentin2@example.com', 'monkey')
       end
 
     end    
@@ -98,7 +98,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
         end
 
         should "not authenticate" do
-          assert_not_equal @<%= file_name %>, <%= class_name %>.authenticate(store, @<%= file_name %>.email, 'monkey')
+          assert_not_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.email, 'monkey')
         end
 
         should "unsuspend <%= file_name %> to active state" do
@@ -122,7 +122,6 @@ class <%= class_name %>Test < ActiveSupport::TestCase
           end
         end        
       end
-    end
 
     <% end %>
     context "remembering" do
@@ -142,7 +141,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
         end
       end
 
-      context "forget_me"
+      context "forget_me" do
         should "unset token" do
           @<%= file_name %>.remember_me
           @<%= file_name %>.forget_me
@@ -179,6 +178,6 @@ class <%= class_name %>Test < ActiveSupport::TestCase
   def create_<%= file_name %>(options = {})
     record = <%= class_name %>.new({ :login => 'quire', :email => 'quire@example.com', :password => 'quire69', :password_confirmation => 'quire69' }.merge(options))
     record.<% if options[:stateful] %>register! if record.valid?<% else %>save<% end %>
-      record
+    record
   end
 end
