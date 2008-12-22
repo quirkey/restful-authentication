@@ -53,7 +53,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
 
     <% if options[:stateful] %>
     context "with states" do
-      context "creating a without passwords" do
+      context "creating a <%= file_name %> without passwords" do
         setup do
           @<%= file_name %> = create_<%= file_name %>(:password => nil, :password_confirmation => nil)
         end
@@ -68,56 +68,57 @@ class <%= class_name %>Test < ActiveSupport::TestCase
           assert @<%= file_name %>.pending?
         end
       end
+    end
     
-      context "deleting <%= file_name %>" do
-        setup do
-          @<%= file_name %>.delete!
-          @<%= file_name %>.reload
-        end
-        
-        should "set deleted time" do
-          assert_not_nil @<%= file_name %>.deleted_at
-        end 
-        
-        should "transition to deleted state" do
-          @<%= file_name %>.deleted?
-        end 
+    context "deleting <%= file_name %>" do
+      setup do
+        @<%= file_name %>.delete!
+        @<%= file_name %>.reload
+      end
+      
+      should "set deleted time" do
+        assert_not_nil @<%= file_name %>.deleted_at
+      end 
+      
+      should "transition to deleted state" do
+        @<%= file_name %>.deleted?
+      end 
+    end
+
+    context "a suspended <%= file_name %>" do
+      setup do
+        @<%= file_name %>.suspend!
       end
 
-      context "a suspended <%= file_name %>" do
-        setup do
-          @<%= file_name %>.suspend!
-        end
-
-        should "be suspended" do
-          assert @<%= file_name %>.suspended?
-        end
-
-        should "not authenticate" do
-          assert_not_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.email, 'monkey')
-        end
-
-        should "unsuspend <%= file_name %> to active state" do
-          @<%= file_name %>.unsuspend!
-          assert @<%= file_name %>.active?
-        end
-        
-        context "unsuspending a suspended <%= file_name %> without activation code and nil activated_at" do
-          should "transition to pending" do
-            <%= class_name %>.update_all :activation_code => nil, :activated_at => nil
-            @<%= file_name %>.reload.unsuspend!
-            assert @<%= file_name %>.pending?
-          end
-        end
-        
-        context "unsuspending a suspended <%= file_name %> with activation code and nil activated_at" do
-          should "transition to pending" do
-            <%= class_name %>.update_all :activation_code => 'foo-bar', :activated_at => nil
-            @<%= file_name %>.reload.unsuspend!
-            assert @<%= file_name %>.pending?
-          end
-        end        
+      should "be suspended" do
+        assert @<%= file_name %>.suspended?
       end
+
+      should "not authenticate" do
+        assert_not_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.email, 'monkey')
+      end
+
+      should "unsuspend <%= file_name %> to active state" do
+        @<%= file_name %>.unsuspend!
+        assert @<%= file_name %>.active?
+      end
+      
+      context "unsuspending a suspended <%= file_name %> without activation code and nil activated_at" do
+        should "transition to pending" do
+          <%= class_name %>.update_all :activation_code => nil, :activated_at => nil
+          @<%= file_name %>.reload.unsuspend!
+          assert @<%= file_name %>.pending?
+        end
+      end
+      
+      context "unsuspending a suspended <%= file_name %> with activation code and nil activated_at" do
+        should "transition to pending" do
+          <%= class_name %>.update_all :activation_code => 'foo-bar', :activated_at => nil
+          @<%= file_name %>.reload.unsuspend!
+          assert @<%= file_name %>.pending?
+        end
+      end        
+    end
 
     <% end %>
     context "remembering" do
