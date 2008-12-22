@@ -18,7 +18,9 @@ class <%= migration_name %> < ActiveRecord::Migration
       t.column :state,                     :string, :null => :no, :default => 'passive'
       t.column :deleted_at,                :datetime<% end %>
     end
+    
     add_index :<%= table_name %>, :login, :unique => true
+    add_index :<%= table_name %>, :email, :unique => true
   end
 
   def self.down
