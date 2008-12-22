@@ -1,8 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
-require '<%= model_controller_file_name %>_controller'
-
-# Re-raise errors caught by the controller.
-class <%= model_controller_class_name %>Controller; def rescue_action(e) raise e end; end
+require 'test_helper'
 
 class <%= model_controller_class_name %>ControllerTest < ActionController::TestCase
   # Be sure to include AuthenticatedTestHelper in test/test_helper.rb instead
