@@ -85,11 +85,12 @@ module AuthenticatedSystem
     end
 
     # Redirect to the URI stored by the most recent store_location call or
-    # to the passed default.  Set an appropriately modified
+    # to the passed default.  Set an appropriately modified. Can also be explicitly 
+    # redirected by passing a param 'r' to the login action.
     #   after_filter :store_location, :only => [:index, :new, :show, :edit]
     # for any controller you want to be bounce-backable.
     def redirect_back_or_default(default)
-      redirect_to(session[:return_to] || default)
+      redirect_to(params[:r] || session[:return_to] || default)
       session[:return_to] = nil
     end
 

@@ -63,6 +63,7 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
           @request.cookies["auth_token"] = cookie_for(:quentin)
           get :new
         end
+        
         should "auto be logged in" do
           assert @controller.send(:logged_in?)
         end
@@ -87,8 +88,21 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
           @request.cookies["auth_token"] = auth_token('invalid_auth_token')
           get :new
         end
+        
         should "not auto log in" do
           assert !@controller.send(:logged_in?)
+        end
+      end
+      
+      context "with explicit redirect" do
+        setup do
+          post :create, :email => 'quentin@example.com', :password => 'monkey', :r => '/path/to/redirect'
+        end
+        
+        assert_redirected_to '/path/to/redirect'
+        
+        should "not auto log in" do
+          assert @controller.send(:logged_in?)
         end
       end
     end
