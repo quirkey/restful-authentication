@@ -99,7 +99,7 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
           post :create, :email => 'quentin@example.com', :password => 'monkey', :r => '/path/to/redirect'
         end
         
-        assert_redirected_to '/path/to/redirect'
+        should_redirect_to '/path/to/redirect'
         
         should "not auto log in" do
           assert @controller.send(:logged_in?)

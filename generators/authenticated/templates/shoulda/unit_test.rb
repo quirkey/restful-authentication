@@ -16,7 +16,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
     end
 
     should "save <%= file_name %>" do
-      assert !<%= file_name %>.new_record?, "#{<%= file_name %>.errors.full_messages.to_sentence}"
+      assert !@<%= file_name %>.new_record?, "#{@<%= file_name %>.errors.full_messages.to_sentence}"
     end
   <% if options[:include_activation] %>
     should "initialize activation code" do
@@ -35,18 +35,18 @@ class <%= class_name %>Test < ActiveSupport::TestCase
 
     context "authenticating" do
 
-      should "authenticate <%= file_name %> by email" do
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.email, 'monkey')
+      should "authenticate <%= file_name %> by login" do
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.login, 'monkey')
       end
 
       should "reset password on update" do
         @<%= file_name %>.update_attributes(:password => 'new password', :password_confirmation => 'new password')
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate('quentin@example.com', 'new password')
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name =>.login, 'new password')
       end
 
       should "not rehash password if password is not included when updating" do
         @<%= file_name %>.update_attributes(:email => 'quentin2@example.com')
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate('quentin2@example.com', 'monkey')
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name =>.login, 'monkey')
       end
 
     end    
@@ -104,10 +104,10 @@ class <%= class_name %>Test < ActiveSupport::TestCase
       end
       
       context "unsuspending a suspended <%= file_name %> without activation code and nil activated_at" do
-        should "transition to pending" do
+        should "transition to passive" do
           <%= class_name %>.update_all :activation_code => nil, :activated_at => nil
           @<%= file_name %>.reload.unsuspend!
-          assert @<%= file_name %>.pending?
+          assert @<%= file_name %>.passive?
         end
       end
       
@@ -134,7 +134,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
         end
         
         should "remember for default two weeks" do
-          assert @<%= file_name %>.remember_token_expires_at.between?(before, 2.weeks.from_now.utc)
+          assert @<%= file_name %>.remember_token_expires_at.between?(@remembered, 2.weeks.from_now.utc)
         end
       end
 
