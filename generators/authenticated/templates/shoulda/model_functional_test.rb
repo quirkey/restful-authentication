@@ -12,7 +12,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
   fixtures :<%= table_name %>
   
   context "<%= model_controller_class_name %> Controller" do
-    context "POST create" do
+    context "creating <%= file_name %>" do
       context "with valid params" do
         setup { create_<%= file_name %> }
 
@@ -43,7 +43,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
       end
     end
     <% if options[:include_activation] %>
-    context "GET activate" do
+    context "activating <%= file_name %>" do
       context "with inactive <%= file name %> with key" do
         setup do
           get :activate, :activation_code => <%= table_name %>(:aaron).activation_code
