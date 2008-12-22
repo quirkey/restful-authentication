@@ -39,10 +39,6 @@ class <%= class_name %>Test < ActiveSupport::TestCase
         assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.email, 'monkey')
       end
 
-      should "authenticate by remote key" do
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate_by_remote_key(@<%= file_name %>.remote_key)
-      end
-
       should "reset password on update" do
         @<%= file_name %>.update_attributes(:password => 'new password', :password_confirmation => 'new password')
         assert_equal @<%= file_name %>, <%= class_name %>.authenticate('quentin@example.com', 'new password')
