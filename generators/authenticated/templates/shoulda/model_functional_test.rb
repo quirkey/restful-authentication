@@ -19,6 +19,10 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
         should_change '<%= class_name %>.count', :by => 1
         should_respond_with :redirect
         
+        should "send welcome email" do
+          assert_sent_email {|email| email.to.include?(assigns(<%= file_name %>).email) }
+        end
+  
         <% if options[:stateful] %>
         should "signup in pending state"
           assigns(:<%= file_name %>).reload
@@ -36,6 +40,10 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
         
         should_not_change '<%= class_name %>.count'
         should_respond_with :success
+        
+        should "not send welcome email" do
+          assert_did_not_send_email
+        end
         
         should "have errors on invalid params" do
           assert assigns(:<%= file_name %>).errors.on(:login)

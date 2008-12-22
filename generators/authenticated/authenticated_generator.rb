@@ -192,16 +192,17 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
         m.template  'stories/rest_auth_stories.rb',
          File.join('stories', 'rest_auth_stories.rb')
 
-      else
-        m.template 'test/functional_test.rb',
+      else 
+        test_template_dir = options[:shoulda] ? 'shoulda' : 'test'
+        m.template "#{test_template_dir}/functional_test.rb",
                     File.join('test/functional',
                               controller_class_path,
                               "#{controller_file_name}_controller_test.rb")
-        m.template 'test/model_functional_test.rb',
+        m.template "#{test_template_dir}/model_functional_test.rb",
                     File.join('test/functional',
                               model_controller_class_path,
                               "#{model_controller_file_name}_controller_test.rb")
-        m.template 'test/unit_test.rb',
+        m.template "#{test_template_dir}/unit_test.rb",
                     File.join('test/unit',
                               class_path,
                               "#{file_name}_test.rb")
@@ -396,6 +397,8 @@ protected
       "Force rspec mode (checks for RAILS_ROOT/spec by default)") { |v| options[:rspec] = true }
     opt.on("--no-rspec",
       "Force test (not RSpec mode")                               { |v| options[:rspec] = false }
+    opt.on("--shoulda",
+      "Use Test::Unit with the Shoulda. Requires the Shoulda Gem/Plugin") { |v| options[:shoulda] = true; options[:rspec] = false }    
     opt.on("--skip-routes",
       "Don't generate a resource line in config/routes.rb")       { |v| options[:skip_routes] = v }
     opt.on("--old-passwords",
