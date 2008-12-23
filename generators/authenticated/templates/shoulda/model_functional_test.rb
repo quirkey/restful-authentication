@@ -8,6 +8,8 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
   fixtures :<%= table_name %>
   
   context "<%= model_controller_class_name %> Controller" do
+    setup { ActionMailer::Base.deliveries = [] }
+    
     context "creating <%= file_name %>" do
       context "with valid params" do
         setup { create_<%= file_name %> }
@@ -34,7 +36,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
       
       context "with invalid params" do
         setup { create_<%= file_name %>(:login => nil) }
-        
+                
         should_not_change '<%= class_name %>.count'
         should_respond_with :success
         
@@ -54,7 +56,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
           get :activate, :activation_code => <%= table_name %>(:aaron).activation_code
         end
         
-        should_redirect_to "session_path"
+        should_redirect_to "login_path"
 
         should "set flash message" do
           assert_not_nil flash[:notice]
