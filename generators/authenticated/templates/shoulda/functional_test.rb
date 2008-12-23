@@ -11,7 +11,7 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
     context "logging in" do
       context "with bad login" do
         setup do
-          post :create, :email => 'quentin@example.com', :password => 'Bas PSSS'
+          post :create, :login => 'quentin', :password => 'Bas PSSS'
         end
 
         should_respond_with :success
@@ -25,7 +25,7 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
 
       context "with good login" do
         setup do
-          post :create, :email => 'quentin@example.com', :password => 'monkey'
+          post :create, :login => 'quentin', :password => 'monkey'
         end
 
         should_respond_with :redirect
@@ -38,7 +38,7 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
       context "with remember me" do
         setup do
           @request.cookies["auth_token"] = nil
-          post :create, :email => 'quentin@example.com', :password => 'monkey', :remember_me => "1"
+          post :create, :login => 'quentin', :password => 'monkey', :remember_me => "1"
         end
 
         should "set auth token" do
@@ -49,7 +49,7 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
       context "without remember me" do
         setup do
           @request.cookies["auth_token"] = nil
-          post :create, :email => 'quentin@example.com', :password => 'monkey', :remember_me => "0"
+          post :create, :login => 'quentin', :password => 'monkey', :remember_me => "0"
         end
 
         should "not set auth token" do
@@ -96,12 +96,12 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
       
       context "with explicit redirect" do
         setup do
-          post :create, :email => 'quentin@example.com', :password => 'monkey', :r => '/path/to/redirect'
+          post :create, :login => 'quentin', :password => 'monkey', :r => '/path/to/redirect'
         end
         
         should_redirect_to "'/path/to/redirect'"
         
-        should "not auto log in" do
+        should "be logged in" do
           assert @controller.send(:logged_in?)
         end
       end
