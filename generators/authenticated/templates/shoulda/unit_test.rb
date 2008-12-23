@@ -41,12 +41,12 @@ class <%= class_name %>Test < ActiveSupport::TestCase
 
       should "reset password on update" do
         @<%= file_name %>.update_attributes(:password => 'new password', :password_confirmation => 'new password')
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name =>.login, 'new password')
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.login, 'new password')
       end
 
       should "not rehash password if password is not included when updating" do
         @<%= file_name %>.update_attributes(:email => 'quentin2@example.com')
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name =>.login, 'monkey')
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.login, 'monkey')
       end
 
     end    
