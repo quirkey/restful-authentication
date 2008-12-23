@@ -54,14 +54,14 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
           get :activate, :activation_code => <%= table_name %>(:aaron).activation_code
         end
         
-        should_redirect_to "'/<%= controller_routing_path %>/new'"
+        should_redirect_to "session_path"
 
         should "set flash message" do
           assert_not_nil flash[:notice]
         end
         
         should "activate <%= file_name %>" do
-          assert assigns(:<%= file_name %>).active?
+          assert <%= table_name %>(:aaron).reload.active?
           assert_equal <%= table_name %>(:aaron), <%= class_name %>.authenticate('aaron', 'monkey')
         end
       end
