@@ -16,7 +16,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
         should_respond_with :redirect
         
         should "send welcome email" do
-          assert_sent_email {|email| email.to.include?(assigns(<%= file_name %>).email) }
+          assert_sent_email {|email| email.to.include?(assigns(:<%= file_name %>).email) }
         end
   
         <% if options[:stateful] %>
@@ -54,7 +54,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
           get :activate, :activation_code => <%= table_name %>(:aaron).activation_code
         end
         
-        should_redirect_to '/<%= controller_routing_path %>/new'
+        should_redirect_to "'/<%= controller_routing_path %>/new'"
 
         should "set flash message" do
           assert_not_nil flash[:notice]
