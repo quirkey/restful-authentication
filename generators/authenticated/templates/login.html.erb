@@ -1,8 +1,8 @@
 <h1>Log In</h1>
 
 <%% form_tag <%= controller_routing_name %>_path do -%>
-<p><%%= label_tag 'login' %><br />
-<%%= text_field_tag 'login', @login %></p>
+<p><%%= label_tag '<%= unique_auth_attr %>' %><br />
+<%%= text_field_tag '<%= unique_auth_attr %>', @<%= unique_auth_attr %> %></p>
 
 <p><%%= label_tag 'password' %><br/>
 <%%= password_field_tag 'password', nil %></p>

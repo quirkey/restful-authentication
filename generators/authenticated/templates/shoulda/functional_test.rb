@@ -8,10 +8,14 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
   fixtures :<%= table_name %>
   
   context "<%= controller_class_name %> Controller" do
+    setup do
+      @<%= file_name %> = <%= table_name %>(:quentin)
+    end
+    
     context "logging in" do
-      context "with bad login" do
+      context "with bad <%= unique_auth_attr %>" do
         setup do
-          post :create, :login => 'quentin', :password => 'Bas PSSS'
+          post :create, :<%= unique_auth_attr %> => @<%= file_name %>.<%= unique_auth_attr %>, :password => 'Bas PSSS'
         end
 
         should_respond_with :success
@@ -23,22 +27,22 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
 
       end
 
-      context "with good login" do
+      context "with good <%= unique_auth_attr %>" do
         setup do
-          post :create, :login => 'quentin', :password => 'monkey'
+          post :create, :<%= unique_auth_attr %> => @<%= file_name %>.<%= unique_auth_attr %>, :password => 'monkey'
         end
 
         should_respond_with :redirect
 
         should "set <%= file_name %> in session" do
-          assert_equal <%= table_name %>(:quentin), @controller.send(:current_<%= file_name %>)
+          assert_equal @<%= file_name %>, @controller.send(:current_<%= file_name %>)
         end
       end
 
       context "with remember me" do
         setup do
           @request.cookies["auth_token"] = nil
-          post :create, :login => 'quentin', :password => 'monkey', :remember_me => "1"
+          post :create, :<%= unique_auth_attr %> => @<%= file_name %>.<%= unique_auth_attr %>, :password => 'monkey', :remember_me => "1"
         end
 
         should "set auth token" do
@@ -49,7 +53,7 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
       context "without remember me" do
         setup do
           @request.cookies["auth_token"] = nil
-          post :create, :login => 'quentin', :password => 'monkey', :remember_me => "0"
+          post :create, :<%= unique_auth_attr %> => @<%= file_name %>.<%= unique_auth_attr %>, :password => 'monkey', :remember_me => "0"
         end
 
         should "not set auth token" do
@@ -96,7 +100,7 @@ class <%= controller_class_name %>ControllerTest < ActionController::TestCase
       
       context "with explicit redirect" do
         setup do
-          post :create, :login => 'quentin', :password => 'monkey', :r => '/path/to/redirect'
+          post :create, :<%= unique_auth_attr %> => @<%= file_name %>.<%= unique_auth_attr %>, :password => 'monkey', :r => '/path/to/redirect'
         end
         
         should_redirect_to "'/path/to/redirect'"

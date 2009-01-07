@@ -6,8 +6,8 @@ class <%= class_name %>Test < ActiveSupport::TestCase
   include AuthenticatedTestHelper
   fixtures :<%= table_name %>
 
-  should_require_attributes :login, :email, :password, :password_confirmation
-  should_require_unique_attributes :email
+  should_require_attributes <% unless options[:email] %>:login, <% end %>:email, :password, :password_confirmation
+  should_require_unique_attributes <% unless options[:email] %>:login, <% end %>:email
 
   context "creating a regular <%= file_name %>" do
     setup do
@@ -35,18 +35,18 @@ class <%= class_name %>Test < ActiveSupport::TestCase
 
     context "authenticating" do
 
-      should "authenticate <%= file_name %> by login" do
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.login, 'monkey')
+      should "authenticate <%= file_name %> by <%= unique_auth_attr %>" do
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.<%= unique_auth_attr %>, 'monkey')
       end
 
       should "reset password on update" do
         @<%= file_name %>.update_attributes(:password => 'new password', :password_confirmation => 'new password')
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.login, 'new password')
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.<%= unique_auth_attr %>, 'new password')
       end
 
       should "not rehash password if password is not included when updating" do
         @<%= file_name %>.update_attributes(:email => 'quentin2@example.com')
-        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.login, 'monkey')
+        assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.<%= unique_auth_attr %>, 'monkey')
       end
 
     end    
@@ -95,7 +95,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
       end
 
       should "not authenticate" do
-        assert_not_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.email, 'monkey')
+        assert_not_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.<%= unique_auth_attr %>, 'monkey')
       end
 
       should "unsuspend <%= file_name %> to active state" do
@@ -173,7 +173,7 @@ class <%= class_name %>Test < ActiveSupport::TestCase
 
   protected
   def create_<%= file_name %>(options = {})
-    record = <%= class_name %>.new({ :login => 'quire', :email => 'quire@example.com', :password => 'quire69', :password_confirmation => 'quire69' }.merge(options))
+    record = <%= class_name %>.new({<% unless options[:email] %>:login => 'quire', <% end %>:email => 'quire@example.com', :password => 'quire69', :password_confirmation => 'quire69' }.merge(options))
     record.<% if options[:stateful] %>register! if record.valid?<% else %>save<% end %>
     record
   end

@@ -17,7 +17,8 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
                 :controller_routing_name,                 # new_session_path
                 :controller_routing_path,                 # /session/new
                 :controller_controller_name,              # sessions
-                :controller_file_name
+                :controller_file_name,
+                :unique_auth_attr # email || login
   alias_method  :controller_table_name, :controller_plural_name
   attr_reader   :model_controller_name,
                 :model_controller_class_path,
@@ -38,6 +39,8 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
 
     @rspec = has_rspec?
 
+    @unique_auth_attr = options[:email] ? 'email' : 'login'
+    
     @controller_name = (args.shift || 'sessions').pluralize
     @model_controller_name = @name.pluralize
 
@@ -399,6 +402,8 @@ protected
       "Force test (not RSpec mode")                               { |v| options[:rspec] = false }
     opt.on("--shoulda",
       "Use Test::Unit with the Shoulda. Requires the Shoulda Gem/Plugin") { |v| options[:shoulda] = true; options[:rspec] = false }    
+    opt.on("--email",
+      "Use email instead of login as unique identifier")          { |v| options[:email] = true }    
     opt.on("--skip-routes",
       "Don't generate a resource line in config/routes.rb")       { |v| options[:skip_routes] = v }
     opt.on("--old-passwords",

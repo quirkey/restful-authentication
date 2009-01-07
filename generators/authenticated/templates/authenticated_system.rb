@@ -111,8 +111,8 @@ module AuthenticatedSystem
 
     # Called from #current_<%= file_name %>.  Now, attempt to login by basic authentication information.
     def login_from_basic_auth
-      authenticate_with_http_basic do |login, password|
-        self.current_<%= file_name %> = <%= class_name %>.authenticate(login, password)
+      authenticate_with_http_basic do |<%= unique_auth_attr %>, password|
+        self.current_<%= file_name %> = <%= class_name %>.authenticate(<%= unique_auth_attr %>, password)
       end
     end
     

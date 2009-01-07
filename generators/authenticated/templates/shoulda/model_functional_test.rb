@@ -35,7 +35,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
       end
       
       context "with invalid params" do
-        setup { create_<%= file_name %>(:login => nil) }
+        setup { create_<%= file_name %>(:<%= unique_auth_attr %> => nil) }
                 
         should_not_change '<%= class_name %>.count'
         should_respond_with :success
@@ -45,7 +45,7 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
         end
         
         should "have errors on invalid params" do
-          assert assigns(:<%= file_name %>).errors.on(:login)
+          assert assigns(:<%= file_name %>).errors.on(:<%= unique_auth_attr %>)
         end
       end
     end
@@ -53,7 +53,8 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
     context "activating <%= file_name %>" do
       context "with inactive <%= file_name %> with key" do
         setup do
-          get :activate, :activation_code => <%= table_name %>(:aaron).activation_code
+          @<%= file_name %> = <%= table_name %>(:aaron)
+          get :activate, :activation_code => @<%= file_name %>.activation_code
         end
         
         should_redirect_to "login_path"
@@ -63,8 +64,8 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
         end
         
         should "activate <%= file_name %>" do
-          assert <%= table_name %>(:aaron).reload.active?
-          assert_equal <%= table_name %>(:aaron), <%= class_name %>.authenticate('aaron', 'monkey')
+          assert @<%= file_name %>.reload.active?
+          assert_equal @<%= file_name %>, <%= class_name %>.authenticate(@<%= file_name %>.<%= unique_auth_attr %>, 'monkey')
         end
       end
       
@@ -95,7 +96,11 @@ class <%= model_controller_class_name %>ControllerTest < ActionController::TestC
 
   protected
     def create_<%= file_name %>(options = {})
-      post :create, :<%= file_name %> => { :login => 'quire', :email => 'quire@example.com',
-        :password => 'quire69', :password_confirmation => 'quire69' }.merge(options)
+      post :create, :<%= file_name %> => {<% unless options[:email] %>
+                                          :login => 'quire',<% end %>
+                                          :email => 'quire@example.com',
+                                          :password => 'quire69', 
+                                          :password_confirmation => 'quire69'
+                                         }.merge(options)
     end
 end
