@@ -156,6 +156,8 @@ To use the generator:
 
 * --shoulda: Generates Test::Unit tests in the Shoulda format. Requires "shoulda":http://github.com/thoughtbot/shoulda installed as a plugin or gem.
 
+* --email: Uses #email as the unique identifier for login instead of login
+
 * --old-passwords: Use the older password scheme (see [[#COMPATIBILITY]], above)
 
 * --skip-migration: Don't generate a migration file for this model
