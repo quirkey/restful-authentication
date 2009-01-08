@@ -42,7 +42,7 @@ class AuthenticatedGenerator < Rails::Generator::NamedBase
     @unique_auth_attr = options[:email] ? 'email' : 'login'
     
     @controller_name = (args.shift || 'sessions').pluralize
-    @model_controller_name = @name.pluralize
+    @model_controller_name = (args.shift || @name).pluralize
 
     # sessions controller
     base_name, @controller_class_path, @controller_file_path, @controller_class_nesting, @controller_class_nesting_depth = extract_modules(@controller_name)
